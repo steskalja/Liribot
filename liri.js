@@ -10,7 +10,12 @@ var spotify = new Spotify(keys.spotify);
 var iCmd ="";
 var rQuest = "";
 var verbose = process.env.Verbose;
-process.env.spotify
+
+if(verbose === "" || typeof(verbose) == 'undefined')
+{
+    verbose = true;
+}
+
 if(process.argv[2] != null)
 {
     iCmd = process.argv[2];
@@ -41,7 +46,7 @@ function LogToFile(fn = "log.txt",data,vrb = false)
 
 
 function SongSearch(song){
-    if(song === "" || song === null)
+    if(song === "" || typeof(song) == "undefined")
     {
         song = 'The Sign';
     }
@@ -71,7 +76,7 @@ Album: ${song.album}
 }
 
 function BandSearch(band){
-    if(band === "" || band === null)
+    if(band === "" || typeof(band) == "undefined")
     {
         band = 'O.A.R';
     }
@@ -113,7 +118,7 @@ Date: ${concert.date}
 }
 
 function MovieSearch(movie){
-    if(movie === "" || movie === null)
+    if(movie === "" || typeof(movie) == "undefined")
     {
         movie = 'Roger Rabbit';
     }
