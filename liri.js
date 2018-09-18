@@ -179,7 +179,7 @@ function DuckSearch(){
     }
     var iSearch = new ddg('Liribot');
     var superheros = ['superman','batman','spiderman','iron man'];
-    var hNum = parseInt(Math.floor((Math.random() * 3)));
+    var hNum = parseInt(Math.floor((Math.random() * 4)));
     var hero = superheros[hNum];
     iSearch.instantAnswer(hero, {skip_disambig: '0'}, function(err, response) {
         if (err) {
