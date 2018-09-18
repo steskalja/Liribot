@@ -41,6 +41,10 @@ function LogToFile(fn = "log.txt",data,vrb = false)
 
 
 function SongSearch(song){
+    if(song === "" || song === null)
+    {
+        song = 'The Sign';
+    }
     if(verbose)
     {
         var msg = `Searching for song: ${song} \r\n`;
@@ -67,6 +71,10 @@ Album: ${song.album}
 }
 
 function BandSearch(band){
+    if(band === "" || band === null)
+    {
+        band = 'O.A.R';
+    }
     if(verbose)
     {
         var msg = `Searching for band: ${band} \r\n`;
@@ -105,6 +113,10 @@ Date: ${concert.date}
 }
 
 function MovieSearch(movie){
+    if(movie === "" || movie === null)
+    {
+        movie = 'Roger Rabbit';
+    }
     if(verbose)
     {
         var msg = `Searching for movie: ${movie} \r\n`;
@@ -144,6 +156,21 @@ Actor(s): ${movie.actors}
     });
 }
 
+function RandomSearch(){
+    fs.readFile('random.txt', "utf8",function (err, data) {
+        if (err) {
+            LogToFile("liri.log",err + "\r\n",verbose);
+            return console.log('Error occurred: ' + err);
+        }
+        content = data;
+        itms = content.split(",");
+        if(itms[0] === 'spotify-this-song')
+        {
+            SongSearch(itms[1]);
+        };  
+    });
+}
+
 function DuckSearch(){
     if(verbose)
     {
@@ -151,11 +178,27 @@ function DuckSearch(){
         LogToFile("log.txt",msg,verbose);
     }
     var iSearch = new ddg('Liribot');
-    iSearch.instantAnswer('superman', {skip_disambig: '0'}, function(err, response) {
+    var superheros = ['superman','batman','spiderman','iron man'];
+    var hNum = parseInt(Math.floor((Math.random() * 3)));
+    var hero = superheros[hNum];
+    iSearch.instantAnswer(hero, {skip_disambig: '0'}, function(err, response) {
+        if (err) {
+            LogToFile("liri.log",err,verbose);
+            return console.log('Error occurred: ' + err);
+          }
         var rslt = `${response.RelatedTopics[0].Text}\r\n`;
         console.log(rslt);
         LogToFile("log.txt",rslt,verbose);
       });
+}
+
+function Help(){
+    console.log(`Please choose the one of the following: 
+node liri.js concert-this <band name> 
+node liri.js spotify-this-song <song name>
+node liri.js movie-this <movie title>
+node liri.js do-what-it-says
+node liri.js i-feel-lucky`);
 }
 
 switch(iCmd.toLowerCase())
@@ -170,22 +213,16 @@ switch(iCmd.toLowerCase())
         MovieSearch(rQuest);
         break;
     case 'do-what-it-says':
-        fs.readFile('random.txt', "utf8",function (err, data) {
-            if (err) {
-                throw err;
-            }
-            content = data;
-            itms = content.split(",");
-            if(itms[0] === 'spotify-this-song')
-            {
-                SongSearch(itms[1]);
-            };  
-        });
+        RandomSearch();
         break;
     case 'i-feel-lucky':
         DuckSearch();
         break;
+    case 'help':
+        Help();
+        break;
     default:
-        console.log("Please choose the one of the following: \r\n concert-this <band name> \r\n spotify-this-song <song name> \r\n movie-this <movie title> \r\n do-what-it-says \r\n i-feel-lucky");
+        console.log('Please read help: node liri.js help');
+        
 }
 
