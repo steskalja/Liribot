@@ -41,6 +41,11 @@ function LogToFile(fn = "log.txt",data,vrb = false)
 
 
 function SongSearch(song){
+    if(verbose)
+    {
+        var msg = `Searching for song: ${song} \r\n`;
+        LogToFile("log.txt",msg,verbose);
+    }
     spotify.search({ type: 'track', query: song}, function(err, data) {
         if (err) {
           LogToFile("liri.log",err,verbose);
@@ -53,7 +58,7 @@ Artist: ${song.artist}
 Track: ${song.name}
 Link: ${song.link}
 Album: ${song.album}
-        `
+`;
         console.log(opt);
         LogToFile("log.txt",opt,verbose);
  
@@ -62,6 +67,11 @@ Album: ${song.album}
 }
 
 function BandSearch(band){
+    if(verbose)
+    {
+        var msg = `Searching for band: ${band} \r\n`;
+        LogToFile("log.txt",msg,verbose);
+    }
 
     var url = `https://rest.bandsintown.com/artists/${band}/events?app_id=codingbootcamp`
     var iBand = band;
@@ -80,7 +90,7 @@ Artist(s): ${concert.artist}
 Venue: ${concert.venue}
 Location: ${concert.location}
 Date: ${concert.date}
-                    `;
+`;
            
                     console.log(opt);
         }
@@ -95,6 +105,11 @@ Date: ${concert.date}
 }
 
 function MovieSearch(movie){
+    if(verbose)
+    {
+        var msg = `Searching for movie: ${movie} \r\n`;
+        LogToFile("log.txt",msg,verbose);
+    }
     var url = `https://www.omdbapi.com/?apikey=trilogy&t=${movie.trim()}`
     var iMovie = movie;
     req(url,function(err, response, rBody) {
@@ -116,7 +131,7 @@ Country: ${movie.country}
 Language(s): ${movie.language}
 Plot: ${movie.plot}
 Actor(s): ${movie.actors}
-                    `;
+`;
            
                     console.log(opt);
         }
@@ -130,11 +145,16 @@ Actor(s): ${movie.actors}
 }
 
 function DuckSearch(){
+    if(verbose)
+    {
+        var msg = `Trying DuckDuckGo Instasearch\r\n`;
+        LogToFile("log.txt",msg,verbose);
+    }
     var iSearch = new ddg('Liribot');
     iSearch.instantAnswer('superman', {skip_disambig: '0'}, function(err, response) {
-        
-        console.log(response.RelatedTopics[0].Text);
-        LogToFile("log.txt",response.RelatedTopics[0].Text,verbose);
+        var rslt = `${response.RelatedTopics[0].Text}\r\n`;
+        console.log(rslt);
+        LogToFile("log.txt",rslt,verbose);
       });
 }
 
